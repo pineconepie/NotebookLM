@@ -44,6 +44,7 @@ jobs:
             NAV_LINKS="$NAV_LINKS <a href=\"/$file\" class=\"text-white font-medium hover:text-blue-300\">$NAME</a>"
           done
           for file in $(find . -maxdepth 1 -name "*.html" -printf "%f\n"); do
+            # This is the corrected line:
             sed -i "s||${NAV_LINKS}|g" "$file"
           done
       - name: Upload artifact
