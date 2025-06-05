@@ -33,6 +33,19 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Generate dynamic navigation
+        run: |
+          NAV_LINKS=""
+          for file in $(find . -maxdepth 1 -name "*.html" -printf "%f\n" | sort); do
+            NAME=$(basename -s .html "$file" | sed 's/\(.\)/\u\1/')
+            if [ "$file" == "index.html" ]; then
+              NAME="Home"
+            fi
+            NAV_LINKS="$NAV_LINKS <a href=\"/$file\" class=\"text-white font-medium hover:text-blue-300\">$NAME</a>"
+          done
+          for file in $(find . -maxdepth 1 -name "*.html" -printf "%f\n"); do
+            sed -i "s||${NAV_LINKS}|g" "$file"
+          done
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
